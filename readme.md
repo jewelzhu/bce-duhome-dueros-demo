@@ -8,7 +8,7 @@
 3) 一个对接duhome的app server，向duhome下发指令从而控制设备
 
 # demo场景描述
-本demo的使用者是一个智能家居服务商，他有两个用户，一个是bob，一个是lily，bob有一个智能设备，叫做小夜灯，而lily则没有智能设备。
+本demo的使用者是一个假想的智能家居服务商，他有两个用户，一个是bob，一个是lily，bob有一个智能设备，叫做小夜灯，而lily则没有智能设备。
 
 bob对着dueros说发现设备，dueros则为他发现了小夜灯，然后bob可以说打开/关闭小夜灯来操控小夜灯的开关。
 
@@ -30,7 +30,7 @@ bob对着dueros说发现设备，dueros则为他发现了小夜灯，然后bob�
 回车后会要求你输入密码，这个密码一会儿要填写到配置里的server.ssl.key-store-password中，然后将生成的my_key_file文件放到resources目录下
     
 ### 2. 创建数据库表
-导入demo中src/resources/schema.sql
+向mysql数据库中导入src/resources/schema.sql
 
     mysql -h YourMysqlHost -P YourMysqlPort -u YourUserName -p YourPassword YourDbname < schema.sql
 
@@ -56,16 +56,17 @@ bob对着dueros说发现设备，dueros则为他发现了小夜灯，然后bob�
     my.test.puid=your duhome puid
 
 ### 4. 编译并启动服务
-编译可执行jar包
 
     cd bce-duhome-dueros-demo
+    # 编译可执行jar包
     bash gradlew build
+    # 启动服务
     java -jar -Dserver.port=443 duhome-dueros-demo-0.1.0.jar
-现在，一个https服务已经启动了
+现在，一个https webservice服务已启动
 
 ### 5. 将你的域名解析到运行了该demo的服务器地址
 
-这样就可以通过域名访问到这个demo服务了
+这样就可以通过"https://域名"访问到这个demo服务了
         
 ### 6. 在dueros.baidu.com上填写服务地址
 
@@ -88,8 +89,8 @@ Token地址为https://my.domain.name/oauth/token，请求方式为POST，
 
 如果你没有dueros真机，那么可以使用dueros网页版的模拟测试。
 
-首先你可以以bob的身份对dueros进行授权，在"配置服务"页面点击"授权"，跳转到demo的登录页面，输入账户bob密码123，然后对read/write权限申请进行approve，完成后将会自动跳转回dueros的授权成功页面。
+首先你可以以bob的身份对dueros进行授权，在"配置服务"页面点击"授权"，跳转到demo的登录页面，输入账户名bob密码123，对read/write权限申请点击approve，然后浏览器将会自动跳转回dueros的授权成功页面。
 
 现在来到模拟测试页面，试试说"发现设备"，那么dueros会为你发现小夜灯，然后再说"关闭小夜灯"或者"打开小夜灯"则你会看到你的设备灯被关闭或打开。
 
-然后你清除下浏览器缓存，以lily的身份授权再试试吧。
+然后你清除下浏览器缓存，以lily的身份授权再试试吧，lily的密码也是123。
