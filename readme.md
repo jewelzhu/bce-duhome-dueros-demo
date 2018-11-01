@@ -61,7 +61,7 @@ bob对着dueros说发现设备，dueros则为他发现了小夜灯，然后bob�
     # 编译可执行jar包
     bash gradlew build
     # 启动服务
-    java -jar -Dserver.port=443 duhome-dueros-demo-0.1.0.jar
+    nohup java -jar -Dserver.port=443 -Dlogging.path=logs duhome-dueros-demo-0.1.0.jar > /dev/null 2>&1 &
 现在，一个https webservice服务已启动
 
 ### 5. 将你的域名解析到运行了该demo的服务器地址

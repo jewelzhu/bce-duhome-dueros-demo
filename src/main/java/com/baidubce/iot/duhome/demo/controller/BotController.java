@@ -33,7 +33,7 @@ public class BotController {
         BotData botResponse;
         // 在这里你可以获取用户的userId从而与请求中的appliance资源进行关联和鉴权
         String userId = req.getUserPrincipal().getName();
-        log.info("user=" + userId);
+        log.debug("user=" + userId);
         switch (request.getHeader().getName()) {
             case DiscoverAppliancesRequest:
                 List<Appliance> applianceList = getAppliancesByUserId(userId);

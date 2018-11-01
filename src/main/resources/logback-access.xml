@@ -4,5 +4,14 @@
             <pattern>%fullRequest%n%n%fullResponse</pattern>
         </encoder>
     </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <encoder>
+            <pattern>%fullRequest%n%n%fullResponse</pattern>
+        </encoder>
+        <file>${logging.path}/bce-duhome-dueros-demo.access.log</file>
+    </appender>
+
     <appender-ref ref="CONSOLE" />
+    <appender-ref ref="FILE" />
 </configuration>
