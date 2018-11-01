@@ -1,9 +1,9 @@
-这是一个集成了dueros和duhome的demo项目，实现了对接dueros和duhome以实现使用语音控制设备的功能，demo中仅以灯为示例，可以自行扩展到其他设备。
+这是一个集成了dueros和duhome的demo项目，实现了对接dueros和duhome以实现使用语音控制设备的功能。你可以运行本demo来走通整个流程，进而将本demo中的代码按需集成到你自己的系统中。
 
 # 核心功能
 1) 一个oauth server，基于spring security oauth2框架，使用mysql做持久层。这个oauth server负责向dueros进行用户资源授权，之后dueros遵循oauth协议向后面的skill bot发送请求访问资源。
 
-2）一个dueros skill bot, 可以接受发现设备/打开灯/关闭灯的dueros反控指令，同时根据dueros请求体中所带的access_token对用户身份、所访问资源进行鉴权。如果需要支持更丰富的指令，在此基础上进一步增加各种命令模型即可。
+2) 一个dueros skill bot, 可以接受发现设备/打开灯/关闭灯的dueros反控指令，同时根据dueros请求体中所带的access_token对用户身份、所访问资源进行鉴权。如果需要支持更丰富的指令，在此基础上进一步增加各种命令模型即可。
 
 3) 一个对接duhome的app server，向duhome下发指令从而控制设备
 
@@ -15,15 +15,13 @@ bob对着dueros说发现设备，dueros则为他发现了小夜灯，然后bob�
 而lily对着dueros说发现设备，dueros则回答我没有发现智能设备。
 
 # 运行demo的前提条件
-1）一个已申购了https证书的自有域名 （dueros要求）
+1) 一个已申购了https证书的自有域名 （dueros要求）
 
-2）在dueros.baidu.com上创建了一个智能家居技能
+2) 在dueros.baidu.com上创建了一个智能家居技能
 
-3）已获得duhome的试用权限（请联系bibo01@baidu.com)，并在duhome上创建了一个设备，设备模型包含属性power, power值为on对应灯打开，power值为off对应灯关闭，设备已经连上了duhome且duhome可以通过更新power的值来控制设备的开灯关灯。
+3) 已获得duhome的试用权限（请联系bibo01@baidu.com)，并在duhome上创建了一个设备，设备模型包含属性power, power值为on对应灯打开，power值为off对应灯关闭，设备已经连上了duhome且duhome可以通过更新power的值来控制设备的开灯关灯。
 
-4）公网java8运行环境及mysql server
-
-这些条件都满足以后，可根据下面的guide来运行本demo，进而将本demo中的代码集成到你自己的系统中。
+4) 公网java8运行环境及mysql server
 
 ## Step by Step Guide:
 
@@ -94,4 +92,4 @@ Token地址为https://my.domain.name/oauth/token，请求方式为POST，
 
 现在来到模拟测试页面，试试说"发现设备"，那么dueros会为你发现小夜灯，然后再说"关闭小夜灯"或者"打开小夜灯"则你会看到你的设备灯被关闭或打开。
 
-然后你清除下浏览器缓存，然后以lily的身份授权再试试吧。
+然后你清除下浏览器缓存，以lily的身份授权再试试吧。
