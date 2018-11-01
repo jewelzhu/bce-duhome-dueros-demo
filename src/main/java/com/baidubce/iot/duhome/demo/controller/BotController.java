@@ -79,7 +79,7 @@ public class BotController {
         appliance1.setActions(Arrays.asList("turnOn", "turnOff"));
         appliance1.setApplianceTypes(Arrays.asList("LIGHT"));
         appliance1.setApplianceId(puid);
-        appliance1.setFriendlyName("测试灯");
+        appliance1.setFriendlyName("小夜灯");
         appliance1.setFriendlyDescription("desc");
         appliance1.setManufacturerName("duhometest");
         appliance1.setModelName("testModel");

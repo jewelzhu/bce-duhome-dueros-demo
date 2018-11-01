@@ -22,16 +22,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public UserDetailsService userDetailsService() {
         UserDetails user =
                 User.withDefaultPasswordEncoder()
-                        .username("user")
+                        .username("bob")
                         .password("123")
                         .roles("USER")
                         .build();
 
         UserDetails user2 =
                 User.withDefaultPasswordEncoder()
-                        .username("admin")
+                        .username("lily")
                         .password("123")
-                        .roles("ADMIN")
+                        .roles("USER")
                         .build();
         return new InMemoryUserDetailsManager(user, user2);
     }
@@ -39,9 +39,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
-                .withUser("user").password("123").roles("USER")
+                .withUser("bob").password("123").roles("USER")
                 .and()
-                .withUser("admin").password("123").roles("ADMIN");
+                .withUser("lily").password("123").roles("USER");
     }
 
     @Override
