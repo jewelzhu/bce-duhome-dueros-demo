@@ -15,6 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * dueros的oauth请求是非标的，需要从requestbody中将access_token解析出来，然后按照标准格式放到request的Authorization header中
+ */
 @Slf4j
 public class DuerosAccessTokenFilter implements Filter {
     @Override
@@ -35,9 +38,7 @@ public class DuerosAccessTokenFilter implements Filter {
                 String token = botData.getPayload().getAccessToken();
                 log.info("get access_token={} from request body and put it into header", token);
                 copiedRequest.setAccessToken( token);
-                // System.out.println("BEFORE TeeFilter. filterChain.doFilter()");
                 chain.doFilter(copiedRequest, response);
-                // System.out.println("AFTER TeeFilter. filterChain.doFilter()");
 
 
             } catch (IOException e) {

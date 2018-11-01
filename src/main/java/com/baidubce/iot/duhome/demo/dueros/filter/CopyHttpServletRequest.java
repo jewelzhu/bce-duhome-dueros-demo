@@ -33,7 +33,7 @@ import static ch.qos.logback.access.AccessConstants.LB_INPUT_BUFFER;
  *
  * @author Ceki G&uuml;lc&uuml;
  *
- * 这个类参考的Teefilter中的实现，由于Teefilter里相关类非public无法直接饮用所以只能拷贝出来一份
+ * 这个类参考的Teefilter中的实现，由于Teefilter里相关类非public无法直接引用所以只能拷贝出来一份
  */
 class CopyHttpServletRequest extends HttpServletRequestWrapper {
 

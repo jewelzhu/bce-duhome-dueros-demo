@@ -25,8 +25,6 @@ import javax.sql.DataSource;
 
 @Configuration
 public class OAuth2ServerConfig {
-    public static final String RESOURCE_ID = "my_resource_id";
-
 
     @Configuration
     @EnableAuthorizationServer
@@ -75,7 +73,7 @@ public class OAuth2ServerConfig {
     static class OAuthResourceConfig extends ResourceServerConfigurerAdapter {
         @Override
         public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
-            resources.resourceId(RESOURCE_ID);
+            resources.resourceId("MyResource");
         }
         @Override
         public void configure(HttpSecurity http) throws Exception {
