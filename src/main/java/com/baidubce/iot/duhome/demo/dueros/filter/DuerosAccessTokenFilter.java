@@ -24,7 +24,6 @@ public class DuerosAccessTokenFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        log.info("hi");
         if (request instanceof HttpServletRequest
                 && ((HttpServletRequest) request).getRequestURI().equals("/api/bot")
                 && StringUtils.isBlank(((HttpServletRequest) request).getHeader("Authorization"))) {

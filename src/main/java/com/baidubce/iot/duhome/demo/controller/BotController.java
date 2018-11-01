@@ -1,5 +1,6 @@
 package com.baidubce.iot.duhome.demo.controller;
 
+import com.baidubce.iot.duhome.demo.config.ForbiddenException;
 import com.baidubce.iot.duhome.demo.duhome.DuhomeService;
 import com.baidubce.iot.duhome.demo.dueros.model.BotData;
 import com.baidubce.iot.duhome.demo.dueros.model.CommandName;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -31,10 +33,11 @@ public class BotController {
         BotData botResponse;
         // 在这里你可以获取用户的userId从而与请求中的appliance资源进行关联和鉴权
         String userId = req.getUserPrincipal().getName();
-        log.info("Hello " + userId);
+        log.info("user=" + userId);
         switch (request.getHeader().getName()) {
             case DiscoverAppliancesRequest:
-                botResponse = buildMockDiscoverApplianceResponse(request);
+                List<Appliance> applianceList = getAppliancesByUserId(userId);
+                botResponse = buildMockDiscoverApplianceResponse(request, applianceList);
                 break;
             case TurnOnRequest:
                 String applianceId = request.getPayload().getAppliance().getApplianceId();
@@ -61,10 +64,32 @@ public class BotController {
 
     private void validateApplianceOwnership(String userId, String applianceId) {
         // TODO 用户应该在此处调用自己的服务，判定userId与applianceId的从属关系
+        if (!("bob".equals(userId) && testPuid.equals(applianceId))) {
+            throw new ForbiddenException();
+        }
     }
 
-    private BotData buildMockDiscoverApplianceResponse(BotData request) {
-        String puid = testPuid; // 设备的唯一id，例如你在duhome的灯的puid
+    private List<Appliance> getAppliancesByUserId(String userId) {
+        // TODO 用户应该在此处调用自己的服务，获取userId对应的设备信息
+        List<Appliance> appliances = new ArrayList<>();
+        switch (userId) {
+            case "bob":
+                Appliance appliance1 = new Appliance();
+                appliance1.setActions(Arrays.asList("turnOn", "turnOff"));
+                appliance1.setApplianceTypes(Arrays.asList("LIGHT"));
+                appliance1.setApplianceId(testPuid);
+                appliance1.setFriendlyName("小夜灯");
+                appliance1.setFriendlyDescription("desc");
+                appliance1.setManufacturerName("duhometest");
+                appliance1.setModelName("testModel");
+                appliance1.setVersion("testVersion");
+                appliance1.setReachable(true);
+                appliances.add(appliance1);
+        }
+        return appliances;
+    }
+
+    private BotData buildMockDiscoverApplianceResponse(BotData request, List<Appliance> applianceList) {
         BotData botResponse = new BotData();
         BotData.Header header = new BotData.Header();
         BotData.Payload payload = new BotData.Payload();
@@ -74,22 +99,11 @@ public class BotController {
         header.setNamespace(request.getHeader().getNamespace());
         botResponse.setHeader(header);
 
-        List<Appliance> applianceList = new ArrayList<>();
-        Appliance appliance1 = new Appliance();
-        appliance1.setActions(Arrays.asList("turnOn", "turnOff"));
-        appliance1.setApplianceTypes(Arrays.asList("LIGHT"));
-        appliance1.setApplianceId(puid);
-        appliance1.setFriendlyName("小夜灯");
-        appliance1.setFriendlyDescription("desc");
-        appliance1.setManufacturerName("duhometest");
-        appliance1.setModelName("testModel");
-        appliance1.setVersion("testVersion");
-        appliance1.setReachable(true);
-        applianceList.add(appliance1);
-        payload.setDiscoveredAppliances(applianceList);
         Group group = new Group();
         group.setGroupName("myGroup");
-        group.setApplianceIds(Arrays.asList(puid));
+        group.setApplianceIds(applianceList.stream()
+                .map(Appliance::getApplianceId)
+                .collect(Collectors.toList()));
         payload.setDiscoveredGroups(Arrays.asList(group));
         botResponse.setPayload(payload);
 
