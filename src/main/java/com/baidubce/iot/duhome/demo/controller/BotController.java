@@ -51,6 +51,7 @@ public class BotController {
                 // call duhome
                 applianceId = request.getPayload().getAppliance().getApplianceId();
                 log.info("turn off appliance {}", applianceId);
+                validateApplianceOwnership(userId, applianceId);
                 duhomeService.turnOffLight(applianceId);
                 // call duhome
                 botResponse = buildConfirmationResponse(request, CommandName.TurnOffConfirmation);
