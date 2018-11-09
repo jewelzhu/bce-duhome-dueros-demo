@@ -4,6 +4,7 @@ import com.baidubce.iot.duhome.demo.dueros.model.BotData;
 import com.baidubce.iot.duhome.demo.dueros.model.DecrementBrightnessPercentageRequest;
 import com.baidubce.iot.duhome.demo.dueros.model.DiscoverAppliancesRequest;
 import com.baidubce.iot.duhome.demo.dueros.model.IncrementBrightnessPercentageRequest;
+import com.baidubce.iot.duhome.demo.dueros.model.SetBrightnessPercentageRequest;
 import com.baidubce.iot.duhome.demo.dueros.model.SetColorRequest;
 import com.baidubce.iot.duhome.demo.dueros.model.TurnOffRequest;
 import com.baidubce.iot.duhome.demo.dueros.model.TurnOnRequest;
@@ -43,6 +44,9 @@ public class JsonHelper {
                     break;
                 case "DecrementBrightnessPercentageRequest":
                     c = DecrementBrightnessPercentageRequest.class;
+                    break;
+                case "SetBrightnessPercentageRequest":
+                    c = SetBrightnessPercentageRequest.class;
                     break;
                 case "SetColorRequest":
                     c = SetColorRequest.class;

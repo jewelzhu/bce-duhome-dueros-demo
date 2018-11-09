@@ -6,6 +6,7 @@ public enum CommandName {
     TurnOffRequest,
     IncrementBrightnessPercentageRequest,
     DecrementBrightnessPercentageRequest,
+    SetBrightnessPercentageRequest,
     SetColorRequest,
 
     DiscoverAppliancesResponse,
@@ -13,6 +14,7 @@ public enum CommandName {
     TurnOffConfirmation,
     IncrementBrightnessPercentageConfirmation,
     DecrementBrightnessPercentageConfirmation,
+    SetBrightnessPercentageConfirmation,
     SetColorConfirmation;
 
     public static CommandName getConfirmationOf(CommandName name) {
@@ -25,6 +27,8 @@ public enum CommandName {
                 return IncrementBrightnessPercentageConfirmation;
             case DecrementBrightnessPercentageRequest:
                 return DecrementBrightnessPercentageConfirmation;
+            case SetBrightnessPercentageRequest:
+                return SetBrightnessPercentageConfirmation;
             case SetColorRequest:
                 return SetColorConfirmation;
             default:

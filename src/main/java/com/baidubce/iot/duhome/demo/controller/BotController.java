@@ -11,6 +11,8 @@ import com.baidubce.iot.duhome.demo.dueros.model.IncrementBrightnessPercentageCo
 import com.baidubce.iot.duhome.demo.dueros.model.IncrementBrightnessPercentageRequest;
 import com.baidubce.iot.duhome.demo.dueros.model.Payload;
 import com.baidubce.iot.duhome.demo.dueros.model.PayloadWithSingleAppliance;
+import com.baidubce.iot.duhome.demo.dueros.model.SetBrightnessPercentageConfirmation;
+import com.baidubce.iot.duhome.demo.dueros.model.SetBrightnessPercentageRequest;
 import com.baidubce.iot.duhome.demo.dueros.model.SetColorConfirmation;
 import com.baidubce.iot.duhome.demo.dueros.model.SetColorRequest;
 import com.baidubce.iot.duhome.demo.dueros.model.TurnOffConfirmation;
@@ -77,6 +79,10 @@ public class BotController {
                     extraInfos.put(ExtraInfoKey.DeltaBrightnessPercentage,
                             ((DecrementBrightnessPercentageRequest)request).getPayload().getDeltaPercentage());
                     break;
+                case SetBrightnessPercentageRequest:
+                    extraInfos.put(ExtraInfoKey.BrightnessPercentage,
+                            ((SetBrightnessPercentageRequest)request).getPayload().getBrightness());
+                    break;
                 case SetColorRequest:
                     extraInfos.put(ExtraInfoKey.Color,
                             ((SetColorRequest)request).getPayload().getColor());
@@ -112,7 +118,7 @@ public class BotController {
                 for (int i = 0; i < puids.length ; i++) {
                     Appliance appliance1 = new Appliance();
                     appliance1.setActions(Arrays.asList("turnOn", "turnOff",
-                            "incrementBrightnessPercentage", "decrementBrightnessPercentage",
+                            "incrementBrightnessPercentage", "decrementBrightnessPercentage", "setBrightnessPercentage",
                             "incrementTemperature", "decrementTemperature",
                             "setColor"));
                     appliance1.setApplianceTypes(Arrays.asList("LIGHT"));
@@ -168,6 +174,9 @@ public class BotController {
                 break;
             case DecrementBrightnessPercentageConfirmation:
                 botResponse = new DecrementBrightnessPercentageConfirmation();
+                break;
+            case SetBrightnessPercentageConfirmation:
+                botResponse = new SetBrightnessPercentageConfirmation();
                 break;
             case SetColorConfirmation:
                 botResponse = new SetColorConfirmation();
