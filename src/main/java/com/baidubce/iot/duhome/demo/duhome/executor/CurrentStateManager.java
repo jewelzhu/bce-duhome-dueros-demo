@@ -18,7 +18,13 @@ public class CurrentStateManager {
     private static final String BRIGHTNESS_PERCENTAGE = "brightness-percentage-";
 
     public int getCurrentBrightness(String puid) {
-        return   (int) redisHelper.get(brightnessRedisKey(puid));
+        Object o = redisHelper.get(brightnessRedisKey(puid));
+        if (o == null) {
+            return 0;
+        }
+        else {
+            return (int) o;
+        }
     }
 
     public void saveCurrentBrightness(String puid, int brightness) {
