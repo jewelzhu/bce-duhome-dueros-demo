@@ -9,5 +9,5 @@ build/
 target/
 work/
 *.iml
-duerostestj.bigenemy.cn.p12.local
+src/main/resources/duerostestj.bigenemy.cn.p12
 src/main/resources/application.properties.me

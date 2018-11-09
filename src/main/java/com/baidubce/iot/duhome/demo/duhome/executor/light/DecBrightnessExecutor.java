@@ -40,10 +40,9 @@ public class DecBrightnessExecutor implements CommandExecutor<ChangeBrightnessPe
     @Override
     public ChangeBrightnessPercentageConfirmationPayload executeCommand(String puid,
                                                                         Map<ExtraInfoKey, Object> extraInfo) {
-        Percentage p = currentStateManager.getCurrentBrightness(puid);
-        double currentBrightness = p == null ? 0 : p.getValue();
+        int currentBrightness = currentStateManager.getCurrentBrightness(puid);
         double deltaPercentage = ((Percentage) extraInfo.get(ExtraInfoKey.DeltaBrightnessPercentage)).getValue();
-        double newBrightness = Math.max(currentBrightness - deltaPercentage, 1);
+        int newBrightness = (int)Math.max(currentBrightness - deltaPercentage, 1);
         JsonNode jsonNode = null;
         try {
             jsonNode = toJsonNode(" {\n" +
@@ -55,7 +54,7 @@ public class DecBrightnessExecutor implements CommandExecutor<ChangeBrightnessPe
             log.error("I will never reach here");
         }
         duhomeClient.updateAgentDeviceProfile(gateway, jsonNode);
-        currentStateManager.saveCurrentBrightness(puid, new Percentage(newBrightness));
+        currentStateManager.saveCurrentBrightness(puid, newBrightness);
         ChangeBrightnessPercentageConfirmationPayload payload = new ChangeBrightnessPercentageConfirmationPayload();
         payload.setPreviousState(new BrightnessState(new Percentage(currentBrightness)));
         payload.setBrightness(new Percentage(newBrightness));
