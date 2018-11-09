@@ -8,6 +8,8 @@ public enum CommandName {
     DecrementBrightnessPercentageRequest,
     SetBrightnessPercentageRequest,
     SetColorRequest,
+    IncrementTemperatureRequest,
+    DecrementTemperatureRequest,
 
     DiscoverAppliancesResponse,
     TurnOnConfirmation,
@@ -15,7 +17,9 @@ public enum CommandName {
     IncrementBrightnessPercentageConfirmation,
     DecrementBrightnessPercentageConfirmation,
     SetBrightnessPercentageConfirmation,
-    SetColorConfirmation;
+    SetColorConfirmation,
+    IncrementTemperatureConfirmation,
+    DecrementTemperatureConfirmation;
 
     public static CommandName getConfirmationOf(CommandName name) {
         switch (name) {
@@ -31,6 +35,10 @@ public enum CommandName {
                 return SetBrightnessPercentageConfirmation;
             case SetColorRequest:
                 return SetColorConfirmation;
+            case IncrementTemperatureRequest:
+                return IncrementTemperatureConfirmation;
+            case DecrementTemperatureRequest:
+                return DecrementTemperatureConfirmation;
             default:
                 return null;
         }

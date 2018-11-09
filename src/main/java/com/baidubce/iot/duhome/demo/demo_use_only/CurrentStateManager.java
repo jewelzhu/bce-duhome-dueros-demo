@@ -1,9 +1,9 @@
-package com.baidubce.iot.duhome.demo.duhome.executor;
+package com.baidubce.iot.duhome.demo.demo_use_only;
 
-import com.baidubce.iot.duhome.demo.dueros.model.Percentage;
-import com.baidubce.iot.duhome.demo.util.RedisHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Service;
 
 /**
@@ -11,11 +11,14 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @Slf4j
+@ConditionalOnExpression("${use.mock.user.appliance.manager:false}")
 public class CurrentStateManager {
     @Autowired
     RedisHelper redisHelper;
 
     private static final String BRIGHTNESS_PERCENTAGE = "brightness-percentage-";
+
+    private static final String TEMPERATURE_PERCENTAGE = "temperature-";
 
     public int getCurrentBrightness(String puid) {
         Object o = redisHelper.get(brightnessRedisKey(puid));
@@ -32,7 +35,28 @@ public class CurrentStateManager {
         redisHelper.set(brightnessRedisKey(puid), brightness);
     }
 
+    public int getCurrentTemperature(String puid) {
+        Object o = redisHelper.get(temperatureRedisKey(puid));
+        if (o == null) {
+            return 0;
+        }
+        else {
+            return (int) o;
+        }
+    }
+
+    public void saveCurrentTemperature(String puid, int value) {
+        log.debug("save current temperature {} {}", puid, value);
+        redisHelper.set(temperatureRedisKey(puid), value);
+    }
+
     public String brightnessRedisKey(String puid) {
         return BRIGHTNESS_PERCENTAGE + puid;
     }
+
+    public String temperatureRedisKey(String puid) {
+        return TEMPERATURE_PERCENTAGE + puid;
+    }
+
+
 }

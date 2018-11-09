@@ -1,8 +1,6 @@
 package com.baidubce.iot.duhome.demo.dueros.filter;
 
-import ch.qos.logback.access.servlet.TeeFilter;
 import ch.qos.logback.access.servlet.Util;
-import com.google.common.collect.Iterators;
 
 import javax.servlet.ReadListener;
 import javax.servlet.http.HttpServletRequestWrapper;
@@ -15,16 +13,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.Set;
 import java.util.Vector;
 
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
 
 import static ch.qos.logback.access.AccessConstants.LB_INPUT_BUFFER;
 

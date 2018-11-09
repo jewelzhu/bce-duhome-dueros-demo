@@ -1,6 +1,7 @@
 package com.baidubce.iot.duhome.demo.util;
 
 import com.baidubce.iot.duhome.demo.Application;
+import com.baidubce.iot.duhome.demo.demo_use_only.RedisHelper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -2,8 +2,10 @@ package com.baidubce.iot.duhome.demo.util;
 
 import com.baidubce.iot.duhome.demo.dueros.model.BotData;
 import com.baidubce.iot.duhome.demo.dueros.model.DecrementBrightnessPercentageRequest;
+import com.baidubce.iot.duhome.demo.dueros.model.DecrementTemperatureRequest;
 import com.baidubce.iot.duhome.demo.dueros.model.DiscoverAppliancesRequest;
 import com.baidubce.iot.duhome.demo.dueros.model.IncrementBrightnessPercentageRequest;
+import com.baidubce.iot.duhome.demo.dueros.model.IncrementTemperatureRequest;
 import com.baidubce.iot.duhome.demo.dueros.model.SetBrightnessPercentageRequest;
 import com.baidubce.iot.duhome.demo.dueros.model.SetColorRequest;
 import com.baidubce.iot.duhome.demo.dueros.model.TurnOffRequest;
@@ -51,6 +53,12 @@ public class JsonHelper {
                 case "SetColorRequest":
                     c = SetColorRequest.class;
                     break;
+                case "IncrementTemperatureRequest":
+                    c = IncrementTemperatureRequest.class;
+                    break;
+                case "DecrementTemperatureRequest":
+                    c = DecrementTemperatureRequest.class;
+                    break;
                     default:
                         throw new RuntimeException("Invalid header.name " + type);
             }
@@ -70,9 +78,5 @@ public class JsonHelper {
             log.error("parse json request fail", e);
             throw new RuntimeException(e.getMessage());
         }
-    }
-
-    public static String getRealLedvancePuid(String zPuid) {
-        return zPuid.substring(2);
     }
 }

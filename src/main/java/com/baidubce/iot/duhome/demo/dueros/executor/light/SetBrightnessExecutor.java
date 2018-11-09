@@ -1,32 +1,34 @@
-package com.baidubce.iot.duhome.demo.duhome.executor.light;
+package com.baidubce.iot.duhome.demo.dueros.executor.light;
 
 import com.baidubce.iot.duhome.demo.dueros.model.BrightnessState;
+import com.baidubce.iot.duhome.demo.dueros.model.ChangeBrightnessPercentageConfirmationPayload;
 import com.baidubce.iot.duhome.demo.dueros.model.CommandName;
 import com.baidubce.iot.duhome.demo.dueros.model.ExtraInfoKey;
-import com.baidubce.iot.duhome.demo.dueros.model.ChangeBrightnessPercentageConfirmationPayload;
 import com.baidubce.iot.duhome.demo.dueros.model.Percentage;
-import com.baidubce.iot.duhome.demo.duhome.executor.CommandExecutor;
-import com.baidubce.iot.duhome.demo.duhome.executor.CurrentStateManager;
+import com.baidubce.iot.duhome.demo.dueros.executor.CommandExecutor;
+import com.baidubce.iot.duhome.demo.demo_use_only.CurrentStateManager;
 import com.baidubce.services.smarthome.SmarthomeAgentClient;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Map;
 
-import static com.baidubce.iot.duhome.demo.util.JsonHelper.getRealLedvancePuid;
+import static com.baidubce.iot.duhome.demo.demo_use_only.StaticUtil.getRealLedvancePuid;
 import static com.baidubce.iot.duhome.demo.util.JsonHelper.toJsonNode;
 
 @Component
 @Slf4j
-public class IncBrightnessExecutor implements CommandExecutor<ChangeBrightnessPercentageConfirmationPayload> {
+@ConditionalOnExpression("${use.mock.user.appliance.manager}")
+public class SetBrightnessExecutor implements CommandExecutor<ChangeBrightnessPercentageConfirmationPayload>{
     @Autowired
     SmarthomeAgentClient duhomeClient;
 
-    @Value("${my.test.gateway:a86htfpyzs7hnagd}")
+    @Value("${my.test.gateway}")
     private String gateway;
 
     @Autowired
@@ -34,18 +36,13 @@ public class IncBrightnessExecutor implements CommandExecutor<ChangeBrightnessPe
 
     @Override
     public CommandName support() {
-        return CommandName.IncrementBrightnessPercentageRequest;
+        return CommandName.SetBrightnessPercentageRequest;
     }
 
     @Override
-    public ChangeBrightnessPercentageConfirmationPayload executeCommand(String puid,
-                                                                        Map<ExtraInfoKey, Object> extraInfo) {
+    public ChangeBrightnessPercentageConfirmationPayload executeCommand(String puid, Map<ExtraInfoKey, Object> extraInfo) {
         int currentBrightness = currentStateManager.getCurrentBrightness(puid);
-        if (currentBrightness == 0) {
-            currentBrightness = 100;
-        }
-        double deltaPercentage = ((Percentage) extraInfo.get(ExtraInfoKey.DeltaBrightnessPercentage)).getValue();
-        int newBrightness = (int)Math.min(currentBrightness + deltaPercentage, 100);
+        int newBrightness = (int)((Percentage)extraInfo.get(ExtraInfoKey.BrightnessPercentage)).getValue();
         JsonNode jsonNode = null;
         try {
             jsonNode = toJsonNode(" {\n" +

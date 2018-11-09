@@ -1,4 +1,4 @@
-package com.baidubce.iot.duhome.demo.duhome.executor;
+package com.baidubce.iot.duhome.demo.dueros.executor;
 
 import com.baidubce.iot.duhome.demo.dueros.model.CommandName;
 import com.baidubce.iot.duhome.demo.dueros.model.ExtraInfoKey;

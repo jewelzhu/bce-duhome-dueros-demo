@@ -1,14 +1,18 @@
 package com.baidubce.iot.duhome.demo.controller;
 
-import com.baidubce.iot.duhome.demo.config.ForbiddenException;
+import com.baidubce.iot.duhome.demo.custom.UserApplianceManager;
 import com.baidubce.iot.duhome.demo.dueros.model.DecrementBrightnessPercentageConfirmation;
 import com.baidubce.iot.duhome.demo.dueros.model.DecrementBrightnessPercentageRequest;
+import com.baidubce.iot.duhome.demo.dueros.model.DecrementTemperatureConfirmation;
+import com.baidubce.iot.duhome.demo.dueros.model.DecrementTemperatureRequest;
 import com.baidubce.iot.duhome.demo.dueros.model.DiscoverAppliancesResponse;
 import com.baidubce.iot.duhome.demo.dueros.model.DiscoverAppliancesResponsePayload;
 import com.baidubce.iot.duhome.demo.dueros.model.ExtraInfoKey;
 import com.baidubce.iot.duhome.demo.dueros.model.Header;
 import com.baidubce.iot.duhome.demo.dueros.model.IncrementBrightnessPercentageConfirmation;
 import com.baidubce.iot.duhome.demo.dueros.model.IncrementBrightnessPercentageRequest;
+import com.baidubce.iot.duhome.demo.dueros.model.IncrementTemperatureConfirmation;
+import com.baidubce.iot.duhome.demo.dueros.model.IncrementTemperatureRequest;
 import com.baidubce.iot.duhome.demo.dueros.model.Payload;
 import com.baidubce.iot.duhome.demo.dueros.model.PayloadWithSingleAppliance;
 import com.baidubce.iot.duhome.demo.dueros.model.SetBrightnessPercentageConfirmation;
@@ -17,16 +21,14 @@ import com.baidubce.iot.duhome.demo.dueros.model.SetColorConfirmation;
 import com.baidubce.iot.duhome.demo.dueros.model.SetColorRequest;
 import com.baidubce.iot.duhome.demo.dueros.model.TurnOffConfirmation;
 import com.baidubce.iot.duhome.demo.dueros.model.TurnOnConfirmation;
-import com.baidubce.iot.duhome.demo.dueros.model.TurnOnRequest;
-import com.baidubce.iot.duhome.demo.duhome.DuhomeService;
+import com.baidubce.iot.duhome.demo.dueros.service.CommandExecutionService;
 import com.baidubce.iot.duhome.demo.dueros.model.BotData;
 import com.baidubce.iot.duhome.demo.dueros.model.CommandName;
 import com.baidubce.iot.duhome.demo.dueros.model.Appliance;
 import com.baidubce.iot.duhome.demo.dueros.model.Group;
 import com.baidubce.iot.duhome.demo.util.JsonHelper;
-import com.baidubce.iot.duhome.demo.util.RedisHelper;
+import com.baidubce.iot.duhome.demo.demo_use_only.RedisHelper;
 import lombok.extern.slf4j.Slf4j;
-import org.bouncycastle.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,7 +36,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -45,9 +46,11 @@ import java.util.stream.Collectors;
 @RestController
 public class BotController {
     @Autowired
-    DuhomeService duhomeService;
+    CommandExecutionService commandExecutionService;
     @Autowired
     RedisHelper redisHelper;
+    @Autowired
+    UserApplianceManager userApplianceManager;
 
     @Value("${my.test.puid}")
     String testPuid;
@@ -61,13 +64,13 @@ public class BotController {
         log.debug("user=" + userId);
         CommandName commandName = request.getHeader().getName();
         if (CommandName.DiscoverAppliancesRequest.equals(commandName)) {
-            List<Appliance> applianceList = getAppliancesByUserId(userId);
-            return buildMockDiscoverApplianceResponse(request, applianceList);
+            List<Appliance> applianceList = userApplianceManager.getAppliancesByUserId(userId);
+            return buildDiscoverApplianceResponse(request, applianceList);
         }
         else {
             String applianceId = ((PayloadWithSingleAppliance) request.getPayload()).getAppliance().getApplianceId();
             log.info("appliance {} cmd {}", applianceId, request.getHeader().getName());
-            validateApplianceOwnership(userId, applianceId);
+            userApplianceManager.validateApplianceOwnership(userId, applianceId);
             Map<ExtraInfoKey, Object> extraInfos = new HashMap<>();
             // set extra info for diffrent commands
             switch (commandName) {
@@ -87,55 +90,25 @@ public class BotController {
                     extraInfos.put(ExtraInfoKey.Color,
                             ((SetColorRequest)request).getPayload().getColor());
                     break;
+                case IncrementTemperatureRequest:
+                    extraInfos.put(ExtraInfoKey.DeltaTemperature,
+                            ((IncrementTemperatureRequest)request).getPayload().getDeltaValue());
+                    break;
+                case DecrementTemperatureRequest:
+                    extraInfos.put(ExtraInfoKey.DeltaTemperature,
+                            ((DecrementTemperatureRequest)request).getPayload().getDeltaValue());
+                    break;
                 default:
                     log.info("no extra info needed for command {}", commandName);
             }
-            Payload responsePayload = duhomeService.executeCommand(applianceId, commandName, extraInfos);
+            Payload responsePayload = commandExecutionService.executeCommand(applianceId, commandName, extraInfos);
             botResponse = buildConfirmationResponse(request,
                     CommandName.getConfirmationOf(commandName), responsePayload);
         }
         return botResponse;
     }
 
-    private void validateApplianceOwnership(String userId, String applianceId) {
-        // TODO 用户应该在此处调用自己的服务，判定userId与applianceId的从属关系
-        if (!("bob".equals(userId) && testPuid.contains(applianceId))) {
-            throw new ForbiddenException();
-        }
-    }
-
-    private List<Appliance> getAppliancesByUserId(String userId) {
-        // TODO 用户应该在此处调用自己的服务，获取userId对应的设备信息，这里是我的mock实现
-        List<Appliance> appliances = new ArrayList<>();
-        String registeredPuids = redisHelper.getString("ledvance_puids");
-        if (registeredPuids == null) {
-            registeredPuids = "";
-        }
-        switch (userId) {
-            case "bob":
-                List<String> names = Arrays.asList("一号灯", "二号灯", "三号灯");
-                String[] puids =  Strings.split(registeredPuids, ',');
-                for (int i = 0; i < puids.length ; i++) {
-                    Appliance appliance1 = new Appliance();
-                    appliance1.setActions(Arrays.asList("turnOn", "turnOff",
-                            "incrementBrightnessPercentage", "decrementBrightnessPercentage", "setBrightnessPercentage",
-                            "incrementTemperature", "decrementTemperature",
-                            "setColor"));
-                    appliance1.setApplianceTypes(Arrays.asList("LIGHT"));
-                    appliance1.setApplianceId(puids[i]);
-                    appliance1.setFriendlyName(names.get(i));
-                    appliance1.setFriendlyDescription("desc");
-                    appliance1.setManufacturerName("duhometest");
-                    appliance1.setModelName("testModel");
-                    appliance1.setVersion("testVersion");
-                    appliance1.setReachable(true);
-                    appliances.add(appliance1);
-                }
-        }
-        return appliances;
-    }
-
-    private DiscoverAppliancesResponse buildMockDiscoverApplianceResponse(BotData request, List<Appliance> applianceList) {
+    private DiscoverAppliancesResponse buildDiscoverApplianceResponse(BotData request, List<Appliance> applianceList) {
         DiscoverAppliancesResponse botResponse = new DiscoverAppliancesResponse();
         Header header = new Header();
         DiscoverAppliancesResponsePayload payload = new DiscoverAppliancesResponsePayload();
@@ -180,6 +153,12 @@ public class BotController {
                 break;
             case SetColorConfirmation:
                 botResponse = new SetColorConfirmation();
+                break;
+            case IncrementTemperatureConfirmation:
+                botResponse = new IncrementTemperatureConfirmation();
+                break;
+            case DecrementTemperatureConfirmation:
+                botResponse = new DecrementTemperatureConfirmation();
                 break;
             default:
                 throw new RuntimeException("unknown confirmation type " + confirmCommand);

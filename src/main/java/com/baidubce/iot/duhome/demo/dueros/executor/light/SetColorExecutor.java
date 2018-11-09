@@ -1,31 +1,29 @@
-package com.baidubce.iot.duhome.demo.duhome.executor.light;
+package com.baidubce.iot.duhome.demo.dueros.executor.light;
 
-import com.baidubce.iot.duhome.demo.dueros.model.BrightnessState;
-import com.baidubce.iot.duhome.demo.dueros.model.ChangeBrightnessPercentageConfirmationPayload;
 import com.baidubce.iot.duhome.demo.dueros.model.ColorState;
 import com.baidubce.iot.duhome.demo.dueros.model.CommandName;
 import com.baidubce.iot.duhome.demo.dueros.model.ExtraInfoKey;
 import com.baidubce.iot.duhome.demo.dueros.model.HSBColor;
-import com.baidubce.iot.duhome.demo.dueros.model.Percentage;
 import com.baidubce.iot.duhome.demo.dueros.model.SetColorConfirmationPayload;
-import com.baidubce.iot.duhome.demo.duhome.executor.CommandExecutor;
-import com.baidubce.iot.duhome.demo.duhome.executor.CurrentStateManager;
+import com.baidubce.iot.duhome.demo.dueros.executor.CommandExecutor;
 import com.baidubce.services.smarthome.SmarthomeAgentClient;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Map;
 
 import static com.baidubce.iot.duhome.demo.util.ColorHelper.HSBtoRGB;
-import static com.baidubce.iot.duhome.demo.util.JsonHelper.getRealLedvancePuid;
+import static com.baidubce.iot.duhome.demo.demo_use_only.StaticUtil.getRealLedvancePuid;
 import static com.baidubce.iot.duhome.demo.util.JsonHelper.toJsonNode;
 
 @Component
 @Slf4j
+@ConditionalOnExpression("${use.mock.user.appliance.manager}")
 public class SetColorExecutor implements CommandExecutor<SetColorConfirmationPayload> {
     @Autowired
     SmarthomeAgentClient duhomeClient;

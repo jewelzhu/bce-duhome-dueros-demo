@@ -1,6 +1,8 @@
-package com.baidubce.iot.duhome.demo.util;
+package com.baidubce.iot.duhome.demo.demo_use_only;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -10,6 +12,7 @@ import javax.annotation.Resource;
 import java.io.Serializable;
 
 @Component
+@ConditionalOnExpression("${use.mock.user.appliance.manager:false}")
 public class RedisHelper {
     @Resource
     private RedisTemplate<String, Object> redisTemplate;

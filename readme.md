@@ -1,4 +1,4 @@
-这是一个集成了dueros和duhome的demo项目，实现了对接dueros和duhome以实现使用语音控制设备的功能。你可以运行本demo来走通整个流程，进而将本demo中的代码按需集成到你自己的系统中。
+这是一个集成了dueros和duhome的demo项目，实现了对接dueros和duhome以实现使用语音控制设备的功能。你可以运行本demo来走通整个流程，也可以把本demo当成一个sdk集成到自己的项目中，如何将本项目当成sdk集成到你的项目将会给最后给出说明。
 
 # 核心功能
 1) 一个oauth server，基于spring security oauth2框架，使用mysql做持久层。这个oauth server负责向dueros进行用户资源授权，之后dueros遵循oauth协议向后面的skill bot发送请求访问资源。
@@ -23,7 +23,7 @@ bob对着dueros说发现设备，dueros则为他发现了小夜灯，然后bob�
 
 4) 公网java8运行环境及mysql server
 
-## Step by Step Guide:
+# Step by Step Run The Demo
 
 ### 1. 生成springboot要求格式的证书密钥文件
     openssl pkcs12 -export -clcerts -in my.domain.name.cer -inkey my.domain.name.key -out my_key_file
@@ -96,3 +96,10 @@ Token地址为https://my.domain.name/oauth/token，请求方式为POST，
 // 经过测试我们发现dueros网页版的模拟测貌似试始终认为你只是单个用户，因此换用户玩不起来。
 
 然后你清除下浏览器缓存，以lily的身份授权再试试吧，lily的密码也是123。
+
+# 把本项目用作集成dueros/duhome的sdk
+
+## 1. 实现你的自己bean
+
+所有出现如下标记的bean都是你应该替换成你自己业务逻辑的bean
+    @ConditionalOnExpression("${use.mock.user.appliance.manager}")

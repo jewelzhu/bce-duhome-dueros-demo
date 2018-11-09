@@ -1,32 +1,37 @@
-package com.baidubce.iot.duhome.demo.duhome.executor.light;
+package com.baidubce.iot.duhome.demo.dueros.executor.light;
 
 import com.baidubce.iot.duhome.demo.dueros.model.BrightnessState;
 import com.baidubce.iot.duhome.demo.dueros.model.ChangeBrightnessPercentageConfirmationPayload;
 import com.baidubce.iot.duhome.demo.dueros.model.CommandName;
 import com.baidubce.iot.duhome.demo.dueros.model.ExtraInfoKey;
 import com.baidubce.iot.duhome.demo.dueros.model.Percentage;
-import com.baidubce.iot.duhome.demo.duhome.executor.CommandExecutor;
-import com.baidubce.iot.duhome.demo.duhome.executor.CurrentStateManager;
+import com.baidubce.iot.duhome.demo.dueros.executor.CommandExecutor;
+import com.baidubce.iot.duhome.demo.demo_use_only.CurrentStateManager;
 import com.baidubce.services.smarthome.SmarthomeAgentClient;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Map;
 
-import static com.baidubce.iot.duhome.demo.util.JsonHelper.getRealLedvancePuid;
+import static com.baidubce.iot.duhome.demo.demo_use_only.StaticUtil.getRealLedvancePuid;
 import static com.baidubce.iot.duhome.demo.util.JsonHelper.toJsonNode;
 
+/**
+ * 这是一个示例的DecrementBrightnessPercentageRequest命令的CommandExecutor实现，实际使用时请替换成你自己实现的bean或者基于此版本进行修改
+ */
 @Component
 @Slf4j
+@ConditionalOnExpression("${use.mock.user.appliance.manager:false}")
 public class DecBrightnessExecutor implements CommandExecutor<ChangeBrightnessPercentageConfirmationPayload> {
     @Autowired
     SmarthomeAgentClient duhomeClient;
 
-    @Value("${my.test.gateway:a86htfpyzs7hnagd}")
+    @Value("${my.test.gateway}")
     private String gateway;
 
     @Autowired
