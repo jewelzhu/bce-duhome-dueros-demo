@@ -12,7 +12,7 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
 bootJar {
-    baseName = 'duhome-dueros-demo'
+    baseName = 'duhome-dueros-demo-ledvance'
     version =  '0.1.0'
 }
 
@@ -36,7 +36,9 @@ dependencies {
     compile("mysql:mysql-connector-java")
     compileOnly("org.projectlombok:lombok:1.16.20")
     compile("net.rakugakibox.spring.boot:logback-access-spring-boot-starter:2.7.1")
-
+    compile ('org.springframework.boot:spring-boot-starter-data-redis') // 用来存储demo里灯的当前状态，其实如果ledvance合规用duhome其实duhome可以帮存就不用再存一次了
     compile('com.baidubce:bce-java-sdk:0.10.39')
+
+    testCompile('org.springframework.boot:spring-boot-starter-test')
 
 }

@@ -31,7 +31,7 @@ import java.util.List;
  */
 public class SmarthomeClient extends AbstractBceClient {
 
-    private static final String ENDPOINT_VERSION = "/v1";
+    protected static final String ENDPOINT_VERSION = "/v1";
 
     private static final HttpResponseHandler[] SMARTHOME_HANDLERS = {
             new BceMetadataResponseHandler(),
@@ -186,24 +186,16 @@ public class SmarthomeClient extends AbstractBceClient {
         return request(internalRequest, ActiveC2cDeviceResponse.class);
     }
 
-    public AbstractBceResponse getDevicePassword(String uuid) {
-        InternalRequest internalRequest = RequestBuilder.getInstance(HttpMethodName.GET, getEndpoint())
-                .path(ENDPOINT_VERSION)
-                .path("/product").path(uuid).path("/password")
-                .build();
-        return request(internalRequest, AbstractBceResponse.class);
-    }
-
 
     private String getDevicePath(String puid) {
         return ENDPOINT_VERSION + "/device/" + puid;
     }
 
-    private void request(InternalRequest request) {
+    protected void request(InternalRequest request) {
         request(request, AbstractBceResponse.class);
     }
 
-    private <T extends AbstractBceResponse> T request(InternalRequest request, Class<T> responseClass) {
+    protected  <T extends AbstractBceResponse> T request(InternalRequest request, Class<T> responseClass) {
         return invokeHttpClient(request, responseClass);
     }
 

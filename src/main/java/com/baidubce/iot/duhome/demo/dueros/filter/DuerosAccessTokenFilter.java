@@ -1,6 +1,7 @@
 package com.baidubce.iot.duhome.demo.dueros.filter;
 
 import com.baidubce.iot.duhome.demo.dueros.model.BotData;
+import com.baidubce.iot.duhome.demo.util.JsonHelper;
 import com.baidubce.util.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -34,8 +35,7 @@ public class DuerosAccessTokenFilter implements Filter {
                 CopyHttpServletRequest copiedRequest = new CopyHttpServletRequest((HttpServletRequest) request);
 
                 String requestBody = new String(copiedRequest.getInputBuffer(), StandardCharsets.UTF_8);
-                BotData botData = JsonUtils.fromJsonString(requestBody, BotData.class);
-                String token = botData.getPayload().getAccessToken();
+                String token = JsonHelper.getAccessTokenInBotData(requestBody);
                 log.info("get access_token={} from request body and put it into header", token);
                 copiedRequest.setAccessToken( token);
                 chain.doFilter(copiedRequest, response);

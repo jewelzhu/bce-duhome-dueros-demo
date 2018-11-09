@@ -1,3 +1,4 @@
+out/
 .idea/
 .classpath
 .gradle/
@@ -8,3 +9,5 @@ build/
 target/
 work/
 *.iml
+duerostestj.bigenemy.cn.p12.local
+src/main/resources/application.properties.me

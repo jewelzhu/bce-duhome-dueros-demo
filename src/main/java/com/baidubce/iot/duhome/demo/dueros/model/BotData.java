@@ -2,35 +2,23 @@ package com.baidubce.iot.duhome.demo.dueros.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.Data;
-
-import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
-public class BotData {
+//@JsonTypeInfo(use = JsonTypeInfo.Id.NAME,
+//        include = JsonTypeInfo.As.PROPERTY,
+//        property = "header.name")
+//@JsonSubTypes({
+//        @JsonSubTypes.Type(value = TurnOnRequest.class, name = "TurnOnRequest"),
+//        @JsonSubTypes.Type(value = TurnOffRequest.class, name = "TurnOffRequest"),
+//        @JsonSubTypes.Type(value = DiscoverAppliancesRequest.class, name = "DiscoverAppliancesRequest"),
+//        @JsonSubTypes.Type(value = IncrementBrightnessPercentageRequest.class, name = "IncrementBrightnessPercentageRequest"),
+//})
+public abstract class BotData<T extends Payload> {
     private Header header;
-    private Payload payload;
-
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    @Data
-    public static class Header {
-        private String payloadVersion;
-        private String namespace;
-        private CommandName name;
-        private String messageId;
-    }
-
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    @Data
-    public static class Payload {
-        private String accessToken;
-        private String openUid;
-        private Appliance appliance;
-        private List<Appliance> discoveredAppliances;
-        private List<Group> discoveredGroups;
-    }
+    private T payload;
 }
