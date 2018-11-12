@@ -1,3 +1,5 @@
+//rootProject.name = "bce-duhome-dueros-demo"
+
 buildscript {
     repositories {
         mavenCentral()
@@ -7,38 +9,31 @@ buildscript {
     }
 }
 
-apply plugin: 'java'
-apply plugin: 'org.springframework.boot'
-apply plugin: 'io.spring.dependency-management'
-
-bootJar {
-    baseName = 'duhome-dueros-demo-ledvance'
-    version =  '0.1.0'
+subprojects {
+    version = '1.0'
 }
 
-repositories {
-    mavenCentral()
-}
+allprojects {
+    apply plugin: 'java'
+    apply plugin: 'io.spring.dependency-management'
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
 
-dependencies {
-    compile("org.springframework.boot:spring-boot-starter-thymeleaf")
-    compile("org.springframework.boot:spring-boot-starter-web") {
-        exclude module: 'httpcore'
+    repositories {
+        mavenCentral()
     }
-    compile 'org.apache.httpcomponents:httpcore:4.4.4'  // 特地引用4.4.4版本的httpcore是因为bce-java-sdk引用了一些较旧的annotation只有4.4.4以下版本才有，bce-java-sdk升级后可以去掉这个tricky操作
-    compile("org.springframework.boot:spring-boot-starter-security")
-    compile("org.springframework.security.oauth:spring-security-oauth2:2.3.3.RELEASE")
-    compile("org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.0.1.RELEASE")
-    compile("org.springframework.boot:spring-boot-starter-jdbc")
-    compile("mysql:mysql-connector-java")
-    compileOnly("org.projectlombok:lombok:1.16.20")
-    compile("net.rakugakibox.spring.boot:logback-access-spring-boot-starter:2.7.1")
-    compile ('org.springframework.boot:spring-boot-starter-data-redis') // 用来存储demo里灯的当前状态，其实如果ledvance合规用duhome其实duhome可以帮存就不用再存一次了
-    compile('com.baidubce:bce-java-sdk:0.10.39')
 
-    testCompile('org.springframework.boot:spring-boot-starter-test')
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
 
+//    dependencyManagement {
+//        imports {
+//            mavenBom 'org.springframework.boot:spring-boot-starter-parent:2.1.0.RELEASE'
+//        }
+//    }
 }
+
+//bootJar {
+//    mainClassName = 'com.baidubce.iot.dueros.bot.Application'
+//    baseName = 'duhome-dueros-demo-ledvance'
+//    version =  '0.1.0'
+//}
