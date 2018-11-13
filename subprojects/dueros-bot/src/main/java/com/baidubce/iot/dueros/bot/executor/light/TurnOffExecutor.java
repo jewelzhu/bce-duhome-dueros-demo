@@ -4,10 +4,9 @@ import com.baidubce.iot.dueros.bot.executor.CommandExecutor;
 import com.baidubce.iot.dueros.bot.model.CommandName;
 import com.baidubce.iot.dueros.bot.model.Payload;
 
-public abstract class TurnOffExecutor implements CommandExecutor<Payload> {
+public interface TurnOffExecutor extends CommandExecutor<Payload> {
 
-    @Override
-    public CommandName support() {
+    default CommandName support() {
         return CommandName.TurnOffRequest;
     }
 

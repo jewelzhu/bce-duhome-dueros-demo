@@ -4,9 +4,8 @@ import com.baidubce.iot.dueros.bot.executor.CommandExecutor;
 import com.baidubce.iot.dueros.bot.model.CommandName;
 import com.baidubce.iot.dueros.bot.model.ChangeTemperatureConfirmationPayload;
 
-public abstract class DecTemperatureExecutor implements CommandExecutor<ChangeTemperatureConfirmationPayload> {
-    @Override
-    public CommandName support() {
+public interface DecTemperatureExecutor extends CommandExecutor<ChangeTemperatureConfirmationPayload> {
+    default CommandName support() {
         return CommandName.DecrementTemperatureRequest;
     }
 }

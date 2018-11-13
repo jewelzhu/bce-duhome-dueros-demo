@@ -1,7 +1,7 @@
 package com.baidubce.iot.dueros.bot.util;
 
 import com.baidubce.iot.dueros.bot.model.BotData;
-import com.baidubce.util.JsonUtils;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -22,26 +22,27 @@ public class JsonHelper {
             String type = node.get("header").get("name").textValue();
             Class c;
             try {
-                c = Class.forName("com.baidubce.bot.model." + type);
+                c = Class.forName("com.baidubce.iot.dueros.bot.model." + type);
             } catch (Exception e) {
                 log.error("Invalid header name {}", type, e);
                 throw new RuntimeException("Invalid header name " + type);
             }
-            return (BotData) JsonUtils.fromJsonString(jsonString, c);
+            return (BotData) fromJsonString(jsonString, c);
         } catch (IOException e) {
             log.error("deserialize json request fail", e);
             throw new RuntimeException(e.getMessage());
         }
     }
 
-    public static String getAccessTokenInBotData(String jsonString) {
-        ObjectMapper mapper = new ObjectMapper();
+
+    public static <T> T fromJsonString(String json, Class<T> clazz) {
+        if (json == null) {
+            return null;
+        }
         try {
-            JsonNode node = mapper.readTree(jsonString);
-            return node.get("payload").get("accessToken").textValue();
-        } catch (IOException e) {
-            log.error("parse json request fail", e);
-            throw new RuntimeException(e.getMessage());
+            return new ObjectMapper().readValue(json, clazz);
+        } catch (Exception e) {
+            throw new RuntimeException("Unable to parse Json String.", e);
         }
     }
 }

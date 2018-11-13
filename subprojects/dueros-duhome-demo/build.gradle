@@ -1,0 +1,17 @@
+
+apply plugin: 'org.springframework.boot'
+
+dependencies {
+    compileOnly("org.projectlombok:lombok:1.16.20")
+    compile ('org.springframework.boot:spring-boot-starter-data-redis') // 用来存储demo里灯的当前状态，其实如果ledvance合规用duhome其实duhome可以帮存就不用再存一次了
+    compile project(':subprojects:dueros-bot')
+    compile project(':subprojects:duhome-sdk')
+    compile project(':subprojects:oauth-config')
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+
+}
+
+bootJar {
+    baseName = 'duhome-dueros-demo-ledvance'
+    version =  '0.1.0'
+}

@@ -1,16 +1,6 @@
 
 
 dependencies {
-    //compile("org.springframework.boot:spring-boot-starter-thymeleaf")
-//    compile("org.springframework.boot:spring-boot-starter-web") {
-//        exclude module: 'httpcore'
-//    }
-//    compile 'org.apache.httpcomponents:httpcore:4.4.4'  // 特地引用4.4.4版本的httpcore是因为bce-java-sdk引用了一些较旧的annotation只有4.4.4以下版本才有，bce-java-sdk升级后可以去掉这个tricky操作
-//    //compile("org.springframework.boot:spring-boot-starter-security")
-    //compile("org.springframework.security.oauth:spring-security-oauth2:2.3.3.RELEASE")
-    //compile("org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.0.1.RELEASE")
-
     compile('com.baidubce:bce-java-sdk:0.10.39')
-    //compileOnly("org.projectlombok:lombok:1.16.20")
     compile('org.bouncycastle:bcprov-jdk15on:1.56')
 }

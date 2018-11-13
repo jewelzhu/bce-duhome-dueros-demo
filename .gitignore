@@ -10,5 +10,5 @@ build/
 target/
 work/
 *.iml
-src/main/resources/duerostestj.bigenemy.cn.p12
-src/main/resources/application.properties.me
+subprojects/dueros-duhome-demo/src/main/resources/duerostestj.bigenemy.cn.p12
+subprojects/dueros-duhome-demo/src/main/resources/application.properties.me

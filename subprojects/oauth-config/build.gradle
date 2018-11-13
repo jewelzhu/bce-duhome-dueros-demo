@@ -1,0 +1,11 @@
+dependencies {
+    compile("net.rakugakibox.spring.boot:logback-access-spring-boot-starter:2.7.1")
+    compile("org.springframework.boot:spring-boot-starter-thymeleaf")
+    compile("org.springframework.boot:spring-boot-starter-security")
+    compile("org.springframework.security.oauth:spring-security-oauth2:2.3.3.RELEASE")
+    compile("org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.1.0.RELEASE")
+    compile("org.springframework.boot:spring-boot-starter-jdbc")
+    compile("mysql:mysql-connector-java")
+    compileOnly("org.projectlombok:lombok:1.16.20")
+
+}

@@ -1,4 +1,3 @@
-//rootProject.name = "bce-duhome-dueros-demo"
 
 buildscript {
     repositories {
@@ -25,15 +24,10 @@ allprojects {
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
 
-//    dependencyManagement {
-//        imports {
-//            mavenBom 'org.springframework.boot:spring-boot-starter-parent:2.1.0.RELEASE'
-//        }
-//    }
+    dependencyManagement {
+        imports {
+            mavenBom 'org.springframework.boot:spring-boot-starter-parent:2.1.0.RELEASE'
+        }
+    }
 }
 
-//bootJar {
-//    mainClassName = 'com.baidubce.iot.dueros.bot.Application'
-//    baseName = 'duhome-dueros-demo-ledvance'
-//    version =  '0.1.0'
-//}
