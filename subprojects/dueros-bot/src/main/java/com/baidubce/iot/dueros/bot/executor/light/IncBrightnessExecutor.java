@@ -4,10 +4,9 @@ import com.baidubce.iot.dueros.bot.executor.CommandExecutor;
 import com.baidubce.iot.dueros.bot.model.ChangeBrightnessPercentageConfirmationPayload;
 import com.baidubce.iot.dueros.bot.model.CommandName;
 
-public abstract class IncBrightnessExecutor implements CommandExecutor<ChangeBrightnessPercentageConfirmationPayload> {
+public interface IncBrightnessExecutor extends CommandExecutor<ChangeBrightnessPercentageConfirmationPayload> {
 
-    @Override
-    public CommandName support() {
+    default CommandName support() {
         return CommandName.IncrementBrightnessPercentageRequest;
     }
 

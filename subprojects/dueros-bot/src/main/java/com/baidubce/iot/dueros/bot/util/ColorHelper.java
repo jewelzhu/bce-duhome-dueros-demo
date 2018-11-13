@@ -1,5 +1,5 @@
 package com.baidubce.iot.dueros.bot.util;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
 public class ColorHelper {
     public static String HSBtoRGB(double hue, double saturation, double brightness) {
         int intRgb =

@@ -118,7 +118,7 @@ public class BotController {
     private BotData buildConfirmationResponse(BotData request, CommandName confirmCommand, Payload responsePayload) {
         BotData botResponse;
         try {
-            Class c = Class.forName("com.baidubce.bot.model." + confirmCommand.name());
+            Class c = Class.forName("com.baidubce.iot.dueros.bot.model." + confirmCommand.name());
             botResponse = (BotData) c.newInstance();
         } catch (Exception e) {
             log.error("Cannot find or initiate class of name {}", confirmCommand, e);

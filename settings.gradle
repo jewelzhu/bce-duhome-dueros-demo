@@ -1,2 +1,12 @@
-include 'subprojects/dueros-bot'
-include 'subprojects/duhome-sdk'
+include 'subprojects:duhome-sdk'
+findProject(':subprojects:duhoms-sdk')?.name = 'duhome-sdk'
+
+include 'subprojects:dueros-bot'
+findProject(':subprojects:dueros-bot')?.name = 'dueros-bot'
+
+include 'subprojects:dueros-duhome-demo'
+findProject(':subprojects:dueros-duhome-demo')?.name = 'dueros-duhome-demo'
+
+include 'subprojects:oauth-config'
+findProject(':subprojects:oauth-config')?.name = 'oauth-config'
+

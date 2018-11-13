@@ -4,10 +4,9 @@ import com.baidubce.iot.dueros.bot.executor.CommandExecutor;
 import com.baidubce.iot.dueros.bot.model.CommandName;
 import com.baidubce.iot.dueros.bot.model.SetColorConfirmationPayload;
 
-public abstract class SetColorExecutor implements CommandExecutor<SetColorConfirmationPayload> {
+public interface SetColorExecutor extends CommandExecutor<SetColorConfirmationPayload> {
 
-    @Override
-    public CommandName support() {
+    default CommandName support() {
         return CommandName.SetColorRequest;
     }
 

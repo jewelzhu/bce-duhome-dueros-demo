@@ -1,6 +1,6 @@
 package com.baidubce.iot.dueros.bot.service;
 
-import com.baidubce.iot.dueros.bot.config.ForbiddenException;
+import com.baidubce.iot.dueros.bot.exception.ForbiddenException;
 import com.baidubce.iot.dueros.bot.model.Appliance;
 
 import java.util.List;

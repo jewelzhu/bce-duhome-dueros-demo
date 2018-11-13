@@ -32,7 +32,7 @@ bob对着dueros说发现设备，dueros则为他发现了小夜灯，然后bob�
 回车后会要求你输入密码，这个密码一会儿要填写到配置里的server.ssl.key-store-password中，然后将生成的my_key_file文件放到resources目录下
     
 ### 2. 创建数据库表
-向mysql数据库中导入src/resources/schema.sql
+向mysql数据库中导入oauth-config/src/main/resources/schema.sql
 
     mysql -h YourMysqlHost -P YourMysqlPort -u YourUserName -p YourPassword YourDbname < schema.sql
 
@@ -58,13 +58,15 @@ bob对着dueros说发现设备，dueros则为他发现了小夜灯，然后bob�
     my.test.puid=your duhome puid
     
     # run基本的demo
-    
+    demo.simpliest:true
 
 ### 4. 编译并启动服务
 
     cd bce-duhome-dueros-demo
     # 编译可执行jar包
     bash gradlew build
+    # 来到可执行jar包所在目录
+    cd subprojects/dueros-duhome-demo/build/libs
     # 启动服务
     nohup java -jar -Dserver.port=443 -Dlogging.path=logs duhome-dueros-demo-0.1.0.jar > /dev/null 2>&1 &
 现在，一个https webservice服务已启动
@@ -104,7 +106,18 @@ Token地址为https://my.domain.name/oauth/token，请求方式为POST，
 
 # 把本项目用作集成dueros/duhome的sdk
 
-## 1. 实现你的自己bean
+项目里包含4个submodule，分别是dueros-bot, duhome-sdk, oauth-config和dueros-duhome-demo。前三个模块是sdk，你可以按需全部使用或只使用其中的部分，第四个模块是使用了前三个模块的示例demo。
 
-所有出现如下标记的bean都是你应该替换成你自己业务逻辑的bean
-    @ConditionalOnExpression("${use.mock.user.appliance.manager:false}")
+<b>dueros-bot:</b> 支持智能家居设备的dueros响应操作，例如开灯/关灯等。里面包含了一个默认的BotController会帮你分发处理来自dueros的请求。
+
+要使用dueros-bot, 你需要按需实现com.baidubce.iot.dueros.bot.executor下的bean，例如你的设备支持TurnOn/TurnOff操作，那么你就需要提供实现了TurnOnExecutor/TurnOffExecutor的两个bean。
+
+同时你需要提供一个实现了UserApplianceManager的bean用来管理哪些用户对应着哪些设备。具体可参考dueros-duhome-demo里的实现。
+
+<b>duhome-sdk:</b> 是一个比较纯粹的duhome的http client sdk，你只需要提供百度云aksk即设备的puid就可以通过duhome-sdk向设备发送指令。
+
+<b>oauth-config:</b> 是一个基于spring security oauth2框架实现的oauth server，提供了对dueros非标oauth请求的兼容适配，使用mysql存储oauth token等信息，如果你的项目是基于spring security的，可以较为方便的启用。
+
+使用oauth-config模块，你需要在mysql中创建定义在oauth-config/src/main/resources/schema.sql中的相关表，然后在application.properties里配置dueros.bot.url.pattern参数, 程序将为这里定义的url开启oauth鉴权和dueros非标oauth适配，如果你使用的就是dueros-bot那么使用默认值/api/bot即可。
+
+<b>dueros-duhome-demo:</b> 顾名思义就是利用了上述三个模块实现的一个完整的可执行webservice，目前里面有两个版本，一个通过demo.simpliest配置开启，使用的是本文中描述的最简单的demo，只支持一个灯的开关；另一个是ledvance智能灯长青，通过demo.ledvance开启，需要依赖redis，支持灯的调亮调色调温灯功能。
