@@ -106,7 +106,7 @@ Token地址为https://my.domain.name/oauth/token，请求方式为POST，
 
 项目里包含4个submodule，分别是dueros-bot, duhome-sdk, oauth-config和dueros-duhome-demo。前三个模块是sdk，你可以按需全部使用或只使用其中的部分，第四个模块是使用了前三个模块的示例demo。
 
-###<b>dueros-bot:</b> 
+### dueros-bot
 
 支持智能家居设备的dueros响应操作，例如开灯/关灯等。里面包含了一个默认的BotController会帮你分发处理来自dueros的请求。
 
@@ -114,16 +114,16 @@ Token地址为https://my.domain.name/oauth/token，请求方式为POST，
 
 同时你需要提供一个实现了UserApplianceManager的bean用来管理哪些用户对应着哪些设备。具体可参考dueros-duhome-demo里的实现。
 
-###<b>duhome-sdk:</b> 
+### duhome-sdk
 
 一个duhome的http client sdk，你只需要提供百度云aksk即设备的puid就可以通过duhome-sdk向设备发送指令。
 
-###<b>oauth-config:</b> 
+### oauth-config
 
 一个基于spring security oauth2框架实现的oauth server，提供了对dueros非标oauth请求的兼容适配，使用mysql存储oauth token等信息，如果你的项目是基于spring security的，可以较为方便的启用。
 
 使用oauth-config模块，你需要在mysql中创建定义在oauth-config/src/main/resources/schema.sql中的相关表，然后在application.properties里配置dueros.bot.url.pattern参数, 程序将为这里定义的url开启oauth鉴权和dueros非标oauth适配，如果你使用的就是dueros-bot那么使用默认值/api/bot即可。
 
-###<b>dueros-duhome-demo:</b> 
+### dueros-duhome-demo
 
 顾名思义就是利用了上述三个模块实现的一个完整的可执行webservice，目前里面有两个版本，一个通过demo.simpliest配置开启，使用的是本文中描述的最简单的demo，只支持一个灯的开关；另一个是ledvance智能灯长青，通过demo.ledvance开启，需要依赖redis，支持灯的调亮调色调温灯功能。
