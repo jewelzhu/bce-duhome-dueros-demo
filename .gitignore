@@ -1,3 +1,5 @@
+logging.path_IS_UNDEFINED/
+out/
 .idea/
 .classpath
 .gradle/
@@ -8,3 +10,5 @@ build/
 target/
 work/
 *.iml
+src/main/resources/duerostestj.bigenemy.cn.p12
+src/main/resources/application.properties.me

@@ -1,0 +1,2 @@
+include 'subprojects/dueros-bot'
+include 'subprojects/duhome-sdk'

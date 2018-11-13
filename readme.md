@@ -1,4 +1,4 @@
-这是一个集成了dueros和duhome的demo项目，实现了对接dueros和duhome以实现使用语音控制设备的功能。你可以运行本demo来走通整个流程，进而将本demo中的代码按需集成到你自己的系统中。
+这是一个集成了dueros和duhome的demo项目，实现了对接dueros和duhome以实现使用语音控制设备的功能。你可以运行本demo来走通整个流程，也可以把本demo当成一个sdk集成到自己的项目中。
 
 # 核心功能
 1) 一个oauth server，基于spring security oauth2框架，使用mysql做持久层。这个oauth server负责向dueros进行用户资源授权，之后dueros遵循oauth协议向后面的skill bot发送请求访问资源。
@@ -7,14 +7,16 @@
 
 3) 一个对接duhome的app server，向duhome下发指令从而控制设备
 
-# demo场景描述
+# 运行demo
+
+## demo场景描述
 本demo的使用者是一个假想的智能家居服务商，他有两个用户，一个是bob，一个是lily，bob有一个智能设备，叫做小夜灯，而lily则没有智能设备。
 
 bob对着dueros说发现设备，dueros则为他发现了小夜灯，然后bob可以说打开/关闭小夜灯来操控小夜灯的开关。
 
 而lily对着dueros说发现设备，dueros则回答我没有发现智能设备。
 
-# 运行demo的前提条件
+## 运行demo的前提条件
 1) 一个已申购了https证书的自有域名 （dueros要求）
 
 2) 在dueros.baidu.com上创建了一个智能家居技能
@@ -23,7 +25,7 @@ bob对着dueros说发现设备，dueros则为他发现了小夜灯，然后bob�
 
 4) 公网java8运行环境及mysql server
 
-## Step by Step Guide:
+## Step by Step Run The Demo
 
 ### 1. 生成springboot要求格式的证书密钥文件
     openssl pkcs12 -export -clcerts -in my.domain.name.cer -inkey my.domain.name.key -out my_key_file
@@ -54,6 +56,9 @@ bob对着dueros说发现设备，dueros则为他发现了小夜灯，然后bob�
     bce.sk=your bce sk   
     # 填写你要测试的设备在duhome上的唯一标示puid
     my.test.puid=your duhome puid
+    
+    # run基本的demo
+    
 
 ### 4. 编译并启动服务
 
@@ -93,4 +98,13 @@ Token地址为https://my.domain.name/oauth/token，请求方式为POST，
 
 现在来到模拟测试页面，试试说"发现设备"，那么dueros会为你发现小夜灯，然后再说"关闭小夜灯"或者"打开小夜灯"则你会看到你的设备灯被关闭或打开。
 
+// 经过测试我们发现dueros网页版的模拟测貌似试始终认为你只是单个用户，因此换用户玩不起来。
+
 然后你清除下浏览器缓存，以lily的身份授权再试试吧，lily的密码也是123。
+
+# 把本项目用作集成dueros/duhome的sdk
+
+## 1. 实现你的自己bean
+
+所有出现如下标记的bean都是你应该替换成你自己业务逻辑的bean
+    @ConditionalOnExpression("${use.mock.user.appliance.manager:false}")
