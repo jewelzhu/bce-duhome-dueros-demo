@@ -15,10 +15,13 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.approval.ApprovalStore;
 import org.springframework.security.oauth2.provider.approval.JdbcApprovalStore;
 import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.code.JdbcAuthorizationCodeServices;
+import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
+import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 
@@ -38,6 +41,9 @@ public class OAuth2ServerConfig {
         @Autowired
         UserDetailsService userDetailsService;
 
+        @Autowired
+        ClientDetailsService clientDetailsService;
+
         @Bean
         public ApprovalStore approvalStore() {
             return new JdbcApprovalStore(dataSource);
@@ -49,6 +55,16 @@ public class OAuth2ServerConfig {
         @Bean
         public TokenStore tokenStore() {
             return new JdbcTokenStore(dataSource);
+        }
+
+        @Bean
+        public AuthorizationServerTokenServices authorizationServerTokenServices() throws Exception {
+            DefaultTokenServices tokenServices = new DefaultTokenServices();
+            tokenServices.setTokenStore(tokenStore());
+            tokenServices.setSupportRefreshToken(true);
+            tokenServices.setClientDetailsService(clientDetailsService);
+            tokenServices.setRefreshTokenValiditySeconds(-1); // refresh token never expire
+            return tokenServices;
         }
 
         @Override
