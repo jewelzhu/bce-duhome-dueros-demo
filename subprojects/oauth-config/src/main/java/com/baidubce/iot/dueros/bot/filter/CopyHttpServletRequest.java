@@ -70,7 +70,6 @@ class CopyHttpServletRequest extends HttpServletRequestWrapper {
             list.add(n);
         }
 
-        //additionally, add the "username" to the list of request header names
         if (this.injectedAccessToken != null) {
             list.add("Authorization");
         }
@@ -85,7 +84,7 @@ class CopyHttpServletRequest extends HttpServletRequestWrapper {
         //get the request object and cast it
         HttpServletRequest request = (HttpServletRequest)getRequest();
 
-        //if we are looking for the "username" request header
+        //if we are looking for the "Authorization" request header
         if("Authorization".equals(name) && injectedAccessToken != null) {
             return "bearer" + injectedAccessToken;
         }

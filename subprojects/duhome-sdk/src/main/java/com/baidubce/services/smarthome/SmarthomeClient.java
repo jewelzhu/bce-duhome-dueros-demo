@@ -2,6 +2,7 @@ package com.baidubce.services.smarthome;
 
 import com.baidubce.AbstractBceClient;
 import com.baidubce.BceClientConfiguration;
+import com.baidubce.auth.SignOptions;
 import com.baidubce.http.HttpMethodName;
 import com.baidubce.http.handler.BceErrorResponseHandler;
 import com.baidubce.http.handler.BceJsonResponseHandler;
@@ -24,7 +25,9 @@ import com.baidubce.services.smarthome.util.RequestBuilder;
 import com.baidubce.services.smarthome.util.SecurityUtils;
 import com.fasterxml.jackson.databind.JsonNode;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Provides the client for accessing the Smart Home(DuHome)
@@ -196,6 +199,13 @@ public class SmarthomeClient extends AbstractBceClient {
     }
 
     protected  <T extends AbstractBceResponse> T request(InternalRequest request, Class<T> responseClass) {
+        Set<String> signHeaders = new HashSet<>();
+        signHeaders.add("Host");
+        signHeaders.add("Content-Type");
+        signHeaders.add("Date");
+        SignOptions signOptions = new SignOptions();
+        signOptions.setHeadersToSign(signHeaders);
+        request.setSignOptions(signOptions);
         return invokeHttpClient(request, responseClass);
     }
 
