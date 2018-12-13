@@ -92,7 +92,7 @@ Token地址为https://my.domain.name/oauth/token，请求方式为POST，
 
 点击保存。
 
-注意refresh_token_validity是用户授权的有效期时限，需要给的比较长，否则到期后oauth授权过期就需要用户重新做一次手动授权。
+注意refresh_token_validity是用户授权的有效期时限，需要给的比较长，否则到期后oauth授权失效就需要用户重新做一次手动授权。
 
 ### 7. 可以测试用语音控制设备了
 
@@ -128,4 +128,4 @@ Token地址为https://my.domain.name/oauth/token，请求方式为POST，
 
 ### dueros-duhome-demo
 
-顾名思义就是利用了上述三个模块实现的一个完整的可执行webservice，目前里面有两个版本，一个通过demo.simpliest配置开启，使用的是本文中描述的最简单的demo，只支持一个灯的开关；另一个是ledvance智能灯长青，通过demo.ledvance开启，需要依赖redis，支持灯的调亮调色调温灯功能。
+顾名思义就是利用了上述三个模块实现的一个完整的可执行webservice，目前里面有两个版本，一个通过demo.simpliest配置开启，使用的是本文中描述的最简单的demo，只支持一个灯的开关；另一个是ledvance智能灯场景，通过demo.ledvance开启，需要依赖redis，支持灯的调亮调色调温灯功能。
