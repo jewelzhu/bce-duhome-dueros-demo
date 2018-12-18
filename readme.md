@@ -88,7 +88,7 @@ Token地址为https://my.domain.name/oauth/token，请求方式为POST，
 你还要为dueros设置一对Client_Id和ClientSecret，假设你填写的是Client_Id为dueros_client, Client_secret为dueros_client_secret，现在你需要将这对client_id/client_secret以及页面上的以https://xiaodu.baidu.com/saiya/auth/开头的回调地址插入mysql中：
 
     INSERT INTO oauth_client_details(client_id, resource_ids, client_secret, scope, authorized_grant_types, web_server_redirect_uri, authorities, access_token_validity, refresh_token_validity, additional_information, autoapprove)  
-        VALUES ('dueros_client', null, 'dueros_client_secret', 'read,write', 'authorization_code,refresh_token', '<从页面上获得的回调地址>', 'ROLE_USER', 1800, 2147483647, null, false);  
+        VALUES ('dueros_client', null, 'dueros_client_secret', 'read,write', 'authorization_code,refresh_token', '<从页面上获得的回调地址>', 'ROLE_USER', 18000, 2147483647, null, false);  
 
 点击保存。
 
